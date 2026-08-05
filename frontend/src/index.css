@@ -1,0 +1,279 @@
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;400;500;600;700&family=Manrope:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #2D4A3E;
+  --primary-hover: #223830;
+  --primary-foreground: #FFFFFF;
+  --secondary: #E07A5F;
+  --secondary-hover: #D6694D;
+  --accent: #F2CC8F;
+  --accent-foreground: #1F2937;
+  --background: #F9F9F7;
+  --background-paper: #FFFFFF;
+  --background-subtle: #F3F4F6;
+  --text-primary: #1F2937;
+  --text-secondary: #4B5563;
+  --text-muted: #9CA3AF;
+  --success: #10B981;
+  --error: #EF4444;
+  --warning: #F59E0B;
+  --info: #3B82F6;
+  --border: #E5E7EB;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Manrope', -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--background);
+  color: var(--text-primary);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+code {
+  font-family: 'JetBrains Mono', source-code-pro, Menlo, Monaco, Consolas, monospace;
+}
+
+@layer base {
+  :root {
+    --background: 60 9% 98%;
+    --foreground: 220 13% 13%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 13% 13%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 13% 13%;
+    --primary: 157 25% 24%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 14 59% 63%;
+    --secondary-foreground: 0 0% 100%;
+    --muted: 220 9% 96%;
+    --muted-foreground: 220 9% 46%;
+    --accent: 41 75% 75%;
+    --accent-foreground: 220 13% 13%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 157 25% 24%;
+    --radius: 0.75rem;
+    --chart-1: 157 25% 24%;
+    --chart-2: 14 59% 63%;
+    --chart-3: 41 75% 75%;
+    --chart-4: 220 70% 50%;
+    --chart-5: 160 60% 45%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--background-subtle);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--text-muted);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-secondary);
+}
+
+/* Animation classes */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+.animate-slide-up {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+
+/* Staggered animations */
+.stagger-1 { animation-delay: 0.1s; }
+.stagger-2 { animation-delay: 0.2s; }
+.stagger-3 { animation-delay: 0.3s; }
+.stagger-4 { animation-delay: 0.4s; }
+.stagger-5 { animation-delay: 0.5s; }
+
+/* Glass effect */
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+/* Card hover effect */
+.card-hover {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* Button styles */
+.btn-primary {
+  background-color: #2D4A3E;
+  color: white;
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.btn-primary:hover {
+  background-color: #223830;
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+.btn-secondary {
+  background-color: #E07A5F;
+  color: white;
+  padding: 0.5rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+}
+
+.btn-secondary:hover {
+  background-color: #D6694D;
+}
+
+.btn-outline {
+  border: 2px solid #2D4A3E;
+  color: #2D4A3E;
+  padding: 0.5rem 1.5rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background: transparent;
+}
+
+.btn-outline:hover {
+  background-color: #2D4A3E;
+  color: white;
+}
+
+/* Input styles */
+.input-base {
+  width: 100%;
+  border-radius: 0.75rem;
+  border: 1px solid #E5E7EB;
+  background-color: white;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  outline: none;
+}
+
+.input-base:focus {
+  border-color: #2D4A3E;
+  box-shadow: 0 0 0 3px rgba(45, 74, 62, 0.1);
+}
+
+/* Card styles */
+.card-base {
+  background-color: white;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03), 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.card-feature {
+  background-color: #F3F4F6;
+  border-radius: 1rem;
+  padding: 2rem;
+  transition: background-color 0.3s ease;
+}
+
+.card-feature:hover {
+  background-color: white;
+}
+
+/* Shadows */
+.shadow-soft {
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
+}
+
+.shadow-card {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03), 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.shadow-hover {
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.03), 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Voice recording indicator */
+.recording-pulse {
+  animation: recording-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes recording-pulse {
+  0% { box-shadow: 0 0 0 0 rgba(224, 122, 95, 0.7); }
+  70% { box-shadow: 0 0 0 15px rgba(224, 122, 95, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(224, 122, 95, 0); }
+}
+
+/* Progress bar animation */
+.progress-animate {
+  transition: width 0.5s ease-out;
+}
+
+/* Debug wrapper fix */
+@layer base {
+  [data-debug-wrapper="true"] {
+    display: contents !important;
+  }
+}

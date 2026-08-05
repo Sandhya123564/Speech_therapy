@@ -1,0 +1,175 @@
+{
+  "design_system": {
+    "identity": {
+      "name": "FluentAI",
+      "tagline": "Find your voice, naturally.",
+      "mission": "To provide accessible, intelligent, and human-centered speech therapy for everyone.",
+      "tone": "Calm, Encouraging, Scientific, Human",
+      "archetype": "The Nurturing Sage"
+    },
+    "typography": {
+      "font_family": {
+        "headings": "Fraunces, serif",
+        "body": "Manrope, sans-serif",
+        "mono": "JetBrains Mono, monospace"
+      },
+      "scale": {
+        "h1": "text-4xl md:text-6xl font-semibold tracking-tight leading-tight",
+        "h2": "text-3xl md:text-5xl font-medium tracking-tight",
+        "h3": "text-2xl md:text-3xl font-medium",
+        "body_lg": "text-lg md:text-xl leading-relaxed",
+        "body_base": "text-base leading-relaxed",
+        "caption": "text-sm text-muted-foreground uppercase tracking-wider"
+      },
+      "imports": [
+        "https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;400;600;700&family=Manrope:wght@400;500;600;700&display=swap"
+      ]
+    },
+    "colors": {
+      "palette": {
+        "primary": {
+          "DEFAULT": "#2D4A3E",
+          "foreground": "#FFFFFF",
+          "hover": "#223830"
+        },
+        "secondary": {
+          "DEFAULT": "#E07A5F",
+          "foreground": "#FFFFFF",
+          "hover": "#D6694D"
+        },
+        "accent": {
+          "DEFAULT": "#F2CC8F",
+          "foreground": "#1F2937"
+        },
+        "background": {
+          "DEFAULT": "#F9F9F7",
+          "paper": "#FFFFFF",
+          "subtle": "#F3F4F6"
+        },
+        "text": {
+          "primary": "#1F2937",
+          "secondary": "#4B5563",
+          "muted": "#9CA3AF"
+        },
+        "status": {
+          "success": "#10B981",
+          "error": "#EF4444",
+          "warning": "#F59E0B",
+          "info": "#3B82F6"
+        }
+      },
+      "gradients": {
+        "hero": "bg-gradient-to-br from-[#F9F9F7] via-[#E8EFEA] to-[#F9F9F7]",
+        "voice_active": "bg-gradient-to-r from-[#2D4A3E] to-[#E07A5F]"
+      }
+    },
+    "spacing": {
+      "container": "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8",
+      "section_padding": "py-16 md:py-24",
+      "component_padding": "p-6 md:p-8"
+    },
+    "borders": {
+      "radius": {
+        "sm": "rounded-md",
+        "md": "rounded-xl",
+        "lg": "rounded-2xl",
+        "full": "rounded-full"
+      },
+      "width": "border",
+      "color": "border-gray-200"
+    },
+    "shadows": {
+      "soft": "shadow-[0_4px_20px_-2px_rgba(0,0,0,0.05)]",
+      "card": "shadow-[0_0_0_1px_rgba(0,0,0,0.03),0_2px_8px_rgba(0,0,0,0.04)]",
+      "hover": "shadow-[0_0_0_1px_rgba(0,0,0,0.03),0_8px_16px_rgba(0,0,0,0.08)]"
+    }
+  },
+  "components": {
+    "buttons": {
+      "primary": "bg-[#2D4A3E] text-white hover:bg-[#223830] rounded-full px-8 py-3 font-medium transition-all shadow-lg hover:shadow-xl active:scale-95",
+      "secondary": "bg-[#E07A5F] text-white hover:bg-[#D6694D] rounded-full px-6 py-2 font-medium transition-all",
+      "outline": "border-2 border-[#2D4A3E] text-[#2D4A3E] hover:bg-[#2D4A3E] hover:text-white rounded-full px-6 py-2 font-medium transition-all",
+      "ghost": "text-[#2D4A3E] hover:bg-[#2D4A3E]/10 rounded-lg px-4 py-2 font-medium transition-all"
+    },
+    "cards": {
+      "base": "bg-white rounded-2xl p-6 border border-gray-100 shadow-card hover:shadow-hover transition-all duration-300",
+      "feature": "bg-[#F3F4F6] rounded-2xl p-8 hover:bg-white transition-colors duration-300"
+    },
+    "inputs": {
+      "base": "w-full rounded-xl border-gray-200 bg-white px-4 py-3 text-base focus:border-[#2D4A3E] focus:ring-2 focus:ring-[#2D4A3E]/20 transition-all outline-none",
+      "label": "block text-sm font-medium text-gray-700 mb-2"
+    }
+  },
+  "layout_strategies": {
+    "landing_page": {
+      "type": "tetris_grid",
+      "grid_cols": "grid-cols-1 md:grid-cols-12",
+      "gap": "gap-8",
+      "hero_span": "col-span-1 md:col-span-7",
+      "image_span": "col-span-1 md:col-span-5"
+    },
+    "dashboard": {
+      "type": "bento_grid",
+      "grid_cols": "grid-cols-1 md:grid-cols-4",
+      "gap": "gap-6",
+      "sidebar_width": "w-64",
+      "main_content": "flex-1"
+    }
+  },
+  "visual_assets": {
+    "images": {
+      "hero_main": "https://images.unsplash.com/photo-1752652016199-a9ca574e08cb?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjh8MHwxfHNlYXJjaHw0fHxzcGVlY2glMjB0aGVyYXBpc3QlMjBoZWxwaW5nJTIwY2hpbGR8ZW58MHx8fHwxNzczMTUwNDIzfDA&ixlib=rb-4.1.0&q=85",
+      "patient_adult": "https://images.unsplash.com/photo-1750935519751-48bf467e5e7a?crop=entropy&cs=srgb&fm=jpg&ixid=M3w3NTY2Nzd8MHwxfHNlYXJjaHwyfHxhZHVsdCUyMHByYWN0aWNpbmclMjBzcGVlY2glMjB0aGVyYXB5fGVufDB8fHx8MTc3MzE1MDQyNHww&ixlib=rb-4.1.0&q=85",
+      "therapy_session": "https://images.unsplash.com/photo-1772419130717-e0630e3e4f28?crop=entropy&cs=srgb&fm=jpg&ixid=M3w4NjAzMjh8MHwxfHNlYXJjaHwyfHxzcGVlY2glMjB0aGVyYXBpc3QlMjBoZWxwaW5nJTIwY2hpbGR8ZW58MHx8fHwxNzczMTUwNDIzfDA&ixlib=rb-4.1.0&q=85",
+      "calm_abstract": "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop"
+    },
+    "icons": {
+      "library": "lucide-react",
+      "style": "stroke-width={1.5} className='w-6 h-6 text-[#2D4A3E]'"
+    }
+  },
+  "motion": {
+    "transitions": {
+      "default": "transition-all duration-300 ease-in-out",
+      "slow": "transition-all duration-500 ease-out"
+    },
+    "animations": {
+      "fade_in": "animate-in fade-in duration-500",
+      "slide_up": "animate-in slide-in-from-bottom-4 duration-500",
+      "pulse_slow": "animate-pulse duration-[3000ms]"
+    }
+  },
+  "accessibility": {
+    "contrast_check": "Ensure text color #1F2937 is used on light backgrounds. Use #FFFFFF on primary buttons.",
+    "focus_states": "All interactive elements must have visible focus rings: focus:ring-2 focus:ring-[#2D4A3E]/50",
+    "aria_labels": "Required for all icon-only buttons and complex interactive components."
+  },
+  "instructions_to_main_agent": [
+    "IMPERATIVE: Use the 'Fraunces' font for all headings (h1-h3) and 'Manrope' for body text.",
+    "IMPERATIVE: Do not use pure black (#000000). Use the dark charcoal (#1F2937) provided.",
+    "IMPERATIVE: Implement the 'Tetris' grid layout for the landing page as described in layout_strategies.",
+    "IMPERATIVE: Ensure all forms use the 'inputs.base' style defined in components.",
+    "IMPERATIVE: The 'Voice' aspect is central. Use the 'pulse_slow' animation on microphone icons or active states.",
+    "IMPERATIVE: For the 'Role Selection' screen, use large, clickable cards with the 'cards.feature' style.",
+    "IMPERATIVE: Use the provided image URLs for their respective sections. Do not use placeholders.",
+    "IMPERATIVE: For the dashboard, strictly follow the 'bento_grid' layout.",
+    "IMPERATIVE: Authentication pages (Login/Register) must look professional and secure, using the 'cards.base' style centered on screen.",
+    "IMPERATIVE: The 'Medical Disclaimer' must be visible but unobtrusive (text-xs text-muted-foreground) in the footer.",
+    "IMPERATIVE: Use 'sonner' for all toast notifications."
+  ],
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "You tend to converge toward generic, 'on distribution' outputs. Avoid this.",
+    "Dark colors look good when used independently without gradients. DO NOT use dark colors as gradients.",
+    "Don't make generic centered layouts, simplistic gradients, and uniform styling.",
+    "Create depth through layered design elements with z-index hierarchy.",
+    "Use glass-morphism effects with backdrop filters (12-24px blur).",
+    "You MUST NOT apply universal transition. Eg: 'transition: all'. This results in breaking transforms.",
+    "You MUST NOT center align the app container, ie do not add '.App { text-align: center; }'.",
+    "Always use modern button styles like pill-shaped.",
+    "NEVER: use AI assistant Emoji characters like 🤖🧠 etc for icons.",
+    "Every interaction needs micro-animations - hover states, transitions.",
+    "Use 2-3x more spacing than feels comfortable.",
+    "Subtle grain textures, noise overlays, custom cursors, selection states.",
+    "Main agent relies on these image URLs. Missing categories = main agent will use placeholder text which is FORBIDDEN."
+  ]
+}
