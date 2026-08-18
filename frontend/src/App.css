@@ -177,3 +177,63 @@
   font-size: 0.875rem;
   color: #92400E;
 }
+/* Mobile responsive fixes */
+@media (max-width: 640px) {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  .App {
+    width: 100%;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Reduce excessive spacing on mobile */
+  .container {
+    width: 100%;
+    max-width: 100%;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+
+  /* Prevent cards/content from overflowing */
+  .bento-grid,
+  .tetris-grid {
+    width: 100%;
+    gap: 1rem;
+  }
+
+  /* Sidebar should not cause horizontal overflow */
+  .sidebar {
+    width: 100%;
+    min-height: auto;
+  }
+
+  /* Make buttons fit smaller screens */
+  button {
+    max-width: 100%;
+  }
+
+  /* Prevent long text from creating horizontal scrolling */
+  h1,
+  h2,
+  h3,
+  h4,
+  p {
+    overflow-wrap: break-word;
+  }
+
+  /* Mobile chat bubbles */
+  .chat-user,
+  .chat-assistant {
+    max-width: 90%;
+    word-break: break-word;
+  }
+}
