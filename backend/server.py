@@ -328,7 +328,7 @@ async def triage_chat(request: ChatRequest, current_user: dict = Depends(get_cur
             })
 
         response_obj = await client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="openai/gpt-oss-120b",
             messages=[
                 {
                     "role": "system",
