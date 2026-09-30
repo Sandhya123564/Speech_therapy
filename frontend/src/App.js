@@ -12,6 +12,8 @@ import TherapyPlanPage from "./pages/TherapyPlanPage";
 import ExerciseSessionPage from "./pages/ExerciseSessionPage";
 import ExerciseLibraryPage from "./pages/ExerciseLibraryPage";
 import ProgressPage from "./pages/ProgressPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ResetPasswordPage from "./pages/ResetPasswordPage";
 
 // Protected Route Component
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -57,6 +59,14 @@ function AppRoutes() {
       <Route path="/" element={user ? <DashboardRedirect /> : <LandingPage />} />
       <Route path="/login" element={user ? <DashboardRedirect /> : <LoginPage />} />
       <Route path="/register" element={user ? <DashboardRedirect /> : <RegisterPage />} />
+      <Route
+  path="/forgot-password"
+  element={user ? <DashboardRedirect /> : <ForgotPasswordPage />}
+ />
+ <Route
+  path="/reset-password"
+  element={user ? <DashboardRedirect /> : <ResetPasswordPage />}
+/>
 
       {/* Protected Patient/Parent routes */}
       <Route

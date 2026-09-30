@@ -9,6 +9,8 @@ from pathlib import Path
 from pydantic import BaseModel, Field, ConfigDict, EmailStr
 from typing import List, Optional, Dict, Any
 import uuid
+import secrets
+import resend
 from datetime import datetime, timezone, timedelta
 import bcrypt
 import jwt
@@ -52,6 +54,13 @@ class UserCreate(UserBase):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
+
+class ForgotPasswordRequest(BaseModel):
+    email: EmailStr
+
+class ResetPasswordRequest(BaseModel):
+    token: str
+    new_password: str
 
 class UserResponse(BaseModel):
     model_config = ConfigDict(extra="ignore")
@@ -154,6 +163,14 @@ class PatientInfo(BaseModel):
     therapist_id: Optional[str] = None
     created_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
 
+class TherapistPatientCreate(BaseModel):
+    name: str
+    email: EmailStr
+    password: str
+    patient_age: int
+    patient_type: str  # 'child' or 'adult'
+    relationship: str  # 'self', 'parent', 'caregiver'
+
 # ============= AUTH HELPERS =============
 
 def hash_password(password: str) -> str:
@@ -190,6 +207,101 @@ async def get_current_user(credentials: HTTPAuthorizationCredentials = Depends(s
 
 # ============= AUTH ROUTES =============
 
+
+@api_router.post("/auth/forgot-password")
+async def forgot_password(data: ForgotPasswordRequest):
+    user = await db.users.find_one({"email": data.email})
+
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="No account found with this email"
+        )
+
+    reset_token = secrets.token_urlsafe(32)
+    expires_at = datetime.now(timezone.utc) + timedelta(minutes=30)
+
+    await db.password_resets.delete_many({"user_id": user["id"]})
+
+    await db.password_resets.insert_one({
+        "token": reset_token,
+        "user_id": user["id"],
+        "expires_at": expires_at.isoformat()
+    })
+
+    resend.api_key = os.getenv("RESEND_API_KEY")
+
+    reset_link = f"http://localhost:3000/reset-password?token={reset_token}"
+
+    resend.Emails.send({
+        "from": "onboarding@resend.dev",
+        "to": [data.email],
+        "subject": "Reset Your Password",
+        "html": f"""
+            <h2>Password Reset</h2>
+            <p>Hello {user.get("name", "User")},</p>
+            <p>We received a request to reset your password.</p>
+            <p>Click the button below to create a new password:</p>
+
+            <p>
+                <a href="{reset_link}"
+                   style="background:#2D4A3E;color:white;padding:12px 20px;
+                          text-decoration:none;border-radius:6px;">
+                    Reset Password
+                </a>
+            </p>
+
+            <p>This link will expire in 30 minutes.</p>
+            <p>If you did not request this, you can ignore this email.</p>
+        """
+    })
+
+    return {
+        "message": "Password reset email sent",
+        "reset_token": reset_token
+    }
+
+    return {
+        "message": "Password reset token created",
+        "reset_token": reset_token
+    }
+@api_router.post("/auth/reset-password")
+async def reset_password(data: ResetPasswordRequest):
+    reset_data = await db.password_resets.find_one({
+        "token": data.token
+    })
+
+    if not reset_data:
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid or expired reset token"
+        )
+
+    expires_at = datetime.fromisoformat(reset_data["expires_at"])
+
+    if datetime.now(timezone.utc) > expires_at:
+        await db.password_resets.delete_one({"token": data.token})
+        raise HTTPException(
+            status_code=400,
+            detail="Invalid or expired reset token"
+        )
+
+    if len(data.new_password) < 6:
+        raise HTTPException(
+            status_code=400,
+            detail="Password must be at least 6 characters"
+        )
+
+    await db.users.update_one(
+        {"id": reset_data["user_id"]},
+        {"$set": {"password_hash": hash_password(data.new_password)}}
+    )
+
+    await db.password_resets.delete_one({"token": data.token})
+
+    return {
+        "message": "Password reset successfully"
+    }
 @api_router.post("/auth/register", response_model=TokenResponse)
 async def register(user_data: UserCreate):
     existing = await db.users.find_one({"email": user_data.email})
@@ -789,6 +901,73 @@ async def get_today_session(current_user: dict = Depends(get_current_user)):
     }
 
 # ============= THERAPIST ROUTES =============
+
+@api_router.post("/therapist/patients")
+async def create_therapist_patient(
+    patient_data: TherapistPatientCreate,
+    current_user: dict = Depends(get_current_user)
+):
+    """Create a new patient account and assign it to the therapist"""
+
+    if current_user["role"] != "therapist":
+        raise HTTPException(
+            status_code=403,
+            detail="Only therapists can add patients"
+        )
+
+    # Check if email already exists
+    existing_user = await db.users.find_one({"email": patient_data.email})
+    if existing_user:
+        raise HTTPException(
+            status_code=400,
+            detail="A user with this email already exists"
+        )
+
+    # Create patient user
+    user_id = str(uuid.uuid4())
+    created_at = datetime.now(timezone.utc).isoformat()
+
+    user_doc = {
+        "id": user_id,
+        "email": patient_data.email,
+        "name": patient_data.name,
+        "role": "patient",
+        "password_hash": hash_password(patient_data.password),
+        "created_at": created_at
+    }
+
+    await db.users.insert_one(user_doc)
+
+    # Create patient information and assign therapist
+    patient_info = {
+        "id": str(uuid.uuid4()),
+        "user_id": user_id,
+        "patient_name": patient_data.name,
+        "patient_age": patient_data.patient_age,
+        "patient_type": patient_data.patient_type,
+        "relationship": patient_data.relationship,
+        "therapist_id": current_user["id"],
+        "created_at": created_at
+    }
+
+    await db.patient_info.insert_one(patient_info)
+    patient_info.pop("_id", None)
+
+
+    return {
+        "message": "Patient added successfully",
+        "patient": {
+            **patient_info,
+            "user": {
+                "id": user_id,
+                "email": patient_data.email,
+                "name": patient_data.name,
+                "role": "patient",
+                "created_at": created_at
+            }
+        }
+    }
+
 
 @api_router.get("/therapist/patients")
 async def get_therapist_patients(current_user: dict = Depends(get_current_user)):

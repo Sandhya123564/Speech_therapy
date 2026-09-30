@@ -30,6 +30,16 @@ const TherapistDashboard = () => {
   const [patientProgress, setPatientProgress] = useState(null);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
+  const [showAddPatient, setShowAddPatient] = useState(false);
+const [addingPatient, setAddingPatient] = useState(false);
+const [newPatient, setNewPatient] = useState({
+  name: "",
+  email: "",
+  password: "",
+  patient_age: "",
+  patient_type: "child",
+  relationship: "self",
+});
 
   useEffect(() => {
     fetchPatients();
@@ -59,7 +69,60 @@ const TherapistDashboard = () => {
       toast.error("Failed to load patient progress");
     }
   };
+  const handleAddPatient = async (e) => {
+  e.preventDefault();
 
+  if (
+    !newPatient.name ||
+    !newPatient.email ||
+    !newPatient.password ||
+    !newPatient.patient_age
+  ) {
+    toast.error("Please fill in all required fields");
+    return;
+  }
+
+  if (newPatient.password.length < 6) {
+    toast.error("Password must be at least 6 characters");
+    return;
+  }
+
+  setAddingPatient(true);
+
+  try {
+    await axios.post(
+      `${API_URL}/therapist/patients`,
+      {
+        ...newPatient,
+        patient_age: Number(newPatient.patient_age),
+      },
+      {
+        headers: getAuthHeader(),
+      }
+    );
+
+    toast.success("Patient added successfully");
+
+    setNewPatient({
+      name: "",
+      email: "",
+      password: "",
+      patient_age: "",
+      patient_type: "child",
+      relationship: "self",
+    });
+
+    setShowAddPatient(false);
+    await fetchPatients();
+  } catch (error) {
+    toast.error(
+      error.response?.data?.detail ||
+        "Failed to add patient"
+    );
+  } finally {
+    setAddingPatient(false);
+  }
+};
   const handleLogout = () => {
     logout();
     toast.success("Logged out successfully");
@@ -142,9 +205,99 @@ const TherapistDashboard = () => {
                   <h2 className="font-['Fraunces'] text-lg font-medium text-[#1F2937]">
                     Your Patients
                   </h2>
+                  <Button
+                    onClick={() => setShowAddPatient(!showAddPatient)}
+                    className="bg-[#2D4A3E] hover:bg-[#223830] text-white rounded-full px-4"
+                  >
+                     + Add Patient
+                  </Button>
                   <Users className="w-5 h-5 text-[#9CA3AF]" />
                 </div>
+                 {showAddPatient && (
+                    <form onSubmit={handleAddPatient} className="mb-5 p-4 bg-[#F9F9F7] rounded-xl border border-gray-200 space-y-3">
+                      <h3 className="font-medium text-[#1F2937]">Add New Patient</h3>
 
+                      <Input
+                         placeholder="Patient name"
+                         value={newPatient.name}
+                         onChange={(e) =>
+                           setNewPatient({ ...newPatient, name: e.target.value })
+                         }
+                         className="input-base"
+                     />
+
+                     <Input
+                       type="email"
+                       placeholder="Patient email"
+                       value={newPatient.email}
+                       onChange={(e) =>
+                         setNewPatient({ ...newPatient, email: e.target.value })
+                       }
+                       className="input-base"
+                     />
+
+                     <Input
+                       type="password"
+                       placeholder="Password (minimum 6 characters)"
+                       value={newPatient.password}
+                       onChange={(e) =>
+                         setNewPatient({ ...newPatient, password: e.target.value })
+                       }
+                       className="input-base"
+                      />
+
+                       <Input
+                         type="number"
+                         placeholder="Age"
+                         value={newPatient.patient_age}
+                         onChange={(e) =>
+                           setNewPatient({ ...newPatient, patient_age: e.target.value })
+                         }
+                         className="input-base"
+                      />
+
+                      <select
+                        value={newPatient.patient_type}
+                        onChange={(e) =>
+                          setNewPatient({ ...newPatient, patient_type: e.target.value })
+                        }
+                        className="w-full rounded-md border border-gray-200 p-2 text-sm"
+                      >
+                        <option value="child">Child</option>
+                        <option value="adult">Adult</option>
+                      </select>
+
+                      <select
+                        value={newPatient.relationship}
+                        onChange={(e) =>
+                          setNewPatient({ ...newPatient, relationship: e.target.value })
+                        }
+                        className="w-full rounded-md border border-gray-200 p-2 text-sm"
+                      >
+                        <option value="self">Self</option>
+                        <option value="parent">Parent</option>
+                        <option value="caregiver">Caregiver</option>
+                      </select>
+
+                      <div className="flex gap-2">
+                        <Button
+                          type="submit"
+                          disabled={addingPatient}
+                          className="flex-1 bg-[#2D4A3E] hover:bg-[#223830] text-white rounded-full"
+                        >
+                          {addingPatient ? "Adding..." : "Add Patient"}
+                        </Button>
+
+                        <Button
+                          type="button"
+                          onClick={() => setShowAddPatient(false)}
+                          className="flex-1 bg-gray-200 hover:bg-gray-300 text-gray-700 rounded-full"
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    </form>
+                  )}
                 <div className="relative mb-4">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9CA3AF]" />
                   <Input
